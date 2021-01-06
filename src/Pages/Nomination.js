@@ -12,7 +12,7 @@ export const Nomination = () => {
 	const [searchResults, setSearchResults] = useState({});
 
 	useEffect(async () => {
-		const OMDbRequestUrl = ` http://www.omdbapi.com/?s=${searchInput}&apikey=42074465`;
+		const OMDbRequestUrl = ` http://www.omdbapi.com/?s=${searchInput}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
 		const results = await OMDdBySearch(OMDbRequestUrl);
 		setSearchResults(results);
 		console.log(results);
