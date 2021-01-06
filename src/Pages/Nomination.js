@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import debounce from 'lodash/debounce';
 
 import { SearchBar } from '../Components/SearchBar';
+import { ResultCards } from '../Components/ResultCards';
 
 import { OMDdBySearch } from '../Services/OMDbRequests';
 
@@ -22,7 +23,7 @@ export const Nomination = () => {
 		<>
 			<SearchBar searchInputUpdate={setSearchInputDebounced} />
 			{searchResults.Response === 'True' ? (
-				<p>Results Available</p>
+				<ResultCards searchResults={searchResults.Search} />
 			) : (
 				<p>{searchResults.Error}</p>
 			)}
