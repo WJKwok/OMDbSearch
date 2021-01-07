@@ -31,7 +31,7 @@ export const Banner = () => {
 	const classes = useStyles(props);
 
 	return (
-		<Slide direction="right" in={!!bannerMessage.text}>
+		<Slide data-testid="banner" direction="right" in={!!bannerMessage.text}>
 			<Typography className={classes.banner} variant="body1" color="secondary">
 				{bannerMessage.text}
 			</Typography>

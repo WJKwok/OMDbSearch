@@ -30,7 +30,7 @@ export const ResultCards = ({
 	const classes = useStyles();
 
 	const card = (movie, alreadyNominated) => (
-		<Card key={movie.imdbID} className={classes.card}>
+		<Card data-testid="result-card" key={movie.imdbID} className={classes.card}>
 			<div>
 				<CardMedia
 					className={classes.cardMedia}
@@ -50,6 +50,9 @@ export const ResultCards = ({
 					size="small"
 					color="primary"
 					disabled={alreadyNominated}
+					data-testid={
+						alreadyNominated ? 'nominated-button-disabled' : 'nominate-button'
+					}
 					onClick={() =>
 						nominationClickHandler({ [movie.imdbID]: { ...movie } })
 					}

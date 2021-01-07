@@ -14,6 +14,7 @@ export const NextPageButton = ({ onClick }) => {
 
 	return (
 		<IconButton
+			data-testid="next-page-button"
 			className={classes.iconButton}
 			aria-label="next result page"
 			onClick={onClick}

@@ -26,7 +26,7 @@ export const SearchBar = ({ searchInputUpdate }) => {
 	const classes = useStyles();
 
 	return (
-		<Paper component="form" className={classes.root}>
+		<Paper data-testid="search-bar" component="form" className={classes.root}>
 			<InputBase
 				className={classes.input}
 				placeholder="Search Movie"
