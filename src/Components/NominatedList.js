@@ -8,6 +8,8 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 
+import { fallBackMoviePoster } from './utils/fallBackMoviePoster';
+
 const useStyles = makeStyles({
 	root: {
 		display: 'flex',
@@ -25,7 +27,10 @@ export const NominatedList = ({ nominatedMovies, removeNominationHandler }) => {
 	const movieItem = (movie) => (
 		<Slide key={movie.imdbID} direction="right" in={true}>
 			<Card className={classes.root}>
-				<CardMedia className={classes.cardMedia} image={movie.Poster} />
+				<CardMedia
+					className={classes.cardMedia}
+					image={fallBackMoviePoster(movie.Poster)}
+				/>
 				<div>
 					<CardContent>
 						<Typography variant="body1">

@@ -7,6 +7,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import { fallBackMoviePoster } from './utils/fallBackMoviePoster';
+
 const useStyles = makeStyles({
 	card: {
 		minWidth: 200,
@@ -35,7 +37,10 @@ export const ResultCards = ({
 	const card = (movie, alreadyNominated) => (
 		<Card key={movie.imdbID} className={classes.card}>
 			<div>
-				<CardMedia className={classes.cardMedia} image={movie.Poster} />
+				<CardMedia
+					className={classes.cardMedia}
+					image={fallBackMoviePoster(movie.Poster)}
+				/>
 				<CardContent>
 					<Typography variant="body1" gutterBottom>
 						{movie.Title}
