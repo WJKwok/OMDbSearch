@@ -37,6 +37,7 @@ export const SearchBar = ({ searchInputUpdate }) => {
 				type="submit"
 				className={classes.iconButton}
 				aria-label="search"
+				onClick={(e) => e.preventDefault()}
 			>
 				<SearchIcon />
 			</IconButton>
