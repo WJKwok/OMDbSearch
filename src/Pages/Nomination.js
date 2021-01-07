@@ -3,6 +3,7 @@ import debounce from 'lodash/debounce';
 
 import { SearchBar } from '../Components/SearchBar';
 import { ResultCards } from '../Components/ResultCards';
+import { NominatedList } from '../Components/NominatedList';
 
 import { OMDdBySearch } from '../Services/OMDbRequests';
 
@@ -22,7 +23,14 @@ export const Nomination = () => {
 
 	const nominationClickHandler = (movie) => {
 		setNominatedMovies({ ...nominatedMovies, ...movie });
-		console.log('nominatedMovies', nominatedMovies);
+	};
+
+	const removeNominationHandler = (movieId) => {
+		const nominatedMoviesCopy = {
+			...nominatedMovies,
+		};
+		delete nominatedMoviesCopy[movieId];
+		setNominatedMovies(nominatedMoviesCopy);
 	};
 
 	return (
@@ -37,6 +45,10 @@ export const Nomination = () => {
 			) : (
 				<p>{searchResults.Error}</p>
 			)}
+			<NominatedList
+				nominatedMovies={nominatedMovies}
+				removeNominationHandler={removeNominationHandler}
+			/>
 		</>
 	);
 };

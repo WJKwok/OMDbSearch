@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -35,7 +34,7 @@ export const ResultCards = ({
 
 	const card = (movie, alreadyNominated) => (
 		<Card key={movie.imdbID} className={classes.card}>
-			<CardActionArea>
+			<div>
 				<CardMedia className={classes.cardMedia} image={movie.Poster} />
 				<CardContent>
 					<Typography variant="body1" gutterBottom>
@@ -45,7 +44,7 @@ export const ResultCards = ({
 						{movie.Year}
 					</Typography>
 				</CardContent>
-			</CardActionArea>
+			</div>
 			<CardActions className={classes.cardActions}>
 				<Button
 					size="small"
