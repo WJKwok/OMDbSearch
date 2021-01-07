@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { red, green } from '@material-ui/core/colors/';
 import Typography from '@material-ui/core/Typography';
-import Zoom from '@material-ui/core/Zoom';
+import Slide from '@material-ui/core/Slide';
 
 import { BannerContext } from '../Context/BannerContext';
 
@@ -31,10 +31,10 @@ export const Banner = () => {
 	const classes = useStyles(props);
 
 	return (
-		<Zoom in={!!bannerMessage.text} data-testid="banner">
+		<Slide direction="right" in={!!bannerMessage.text}>
 			<Typography className={classes.banner} variant="body1" color="secondary">
 				{bannerMessage.text}
 			</Typography>
-		</Zoom>
+		</Slide>
 	);
 };

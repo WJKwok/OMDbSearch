@@ -7,7 +7,7 @@ import { NominatedList } from '../Components/NominatedList';
 import { ProgressBar } from '../Components/ProgressBar';
 import { NextPageButton } from '../Components/NextPageButton';
 
-import { OMDdBySearch } from '../Services/OMDbRequests';
+import { OMDdBySearch, createOMDbURL } from '../Services/OMDbRequests';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -31,7 +31,7 @@ export const Nomination = () => {
 	const minNominatedMoviesLength = 5;
 
 	useEffect(async () => {
-		const OMDbRequestUrl = ` http://www.omdbapi.com/?s=${searchInput}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
+		const OMDbRequestUrl = createOMDbURL(searchInput);
 		const results = await OMDdBySearch(OMDbRequestUrl);
 		setSearchResults(results);
 		setCurrentResultPage(1);
@@ -52,7 +52,7 @@ export const Nomination = () => {
 
 	const getNextPageOfResults = async () => {
 		const nextPageToQuery = currentResultPage + 1;
-		const OMDbRequestUrl = ` http://www.omdbapi.com/?s=${searchInput}&page=${nextPageToQuery}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
+		const OMDbRequestUrl = createOMDbURL(searchInput, nextPageToQuery);
 		const results = await OMDdBySearch(OMDbRequestUrl);
 		const appendedSearchResults = {
 			...searchResults,
