@@ -4,6 +4,7 @@ import debounce from 'lodash/debounce';
 import { SearchBar } from '../Components/SearchBar';
 import { ResultCards } from '../Components/ResultCards';
 import { NominatedList } from '../Components/NominatedList';
+import { ProgressBar } from '../Components/ProgressBar';
 
 import { OMDdBySearch } from '../Services/OMDbRequests';
 
@@ -13,6 +14,8 @@ export const Nomination = () => {
 
 	const [searchResults, setSearchResults] = useState({});
 	const [nominatedMovies, setNominatedMovies] = useState({});
+
+	const minNominatedMoviesLength = 5;
 
 	useEffect(async () => {
 		const OMDbRequestUrl = ` http://www.omdbapi.com/?s=${searchInput}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
@@ -45,6 +48,10 @@ export const Nomination = () => {
 			) : (
 				<p>{searchResults.Error}</p>
 			)}
+			<ProgressBar
+				current={Object.keys(nominatedMovies).length}
+				goal={minNominatedMoviesLength}
+			/>
 			<NominatedList
 				nominatedMovies={nominatedMovies}
 				removeNominationHandler={removeNominationHandler}
