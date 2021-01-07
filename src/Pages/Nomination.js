@@ -11,6 +11,7 @@ export const Nomination = () => {
 	const setSearchInputDebounced = debounce(setSearchInput, 500);
 
 	const [searchResults, setSearchResults] = useState({});
+	const [nominatedMovies, setNominatedMovies] = useState({});
 
 	useEffect(async () => {
 		const OMDbRequestUrl = ` http://www.omdbapi.com/?s=${searchInput}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
@@ -19,11 +20,20 @@ export const Nomination = () => {
 		console.log(results);
 	}, [searchInput]);
 
+	const nominationClickHandler = (movie) => {
+		setNominatedMovies({ ...nominatedMovies, ...movie });
+		console.log('nominatedMovies', nominatedMovies);
+	};
+
 	return (
 		<>
 			<SearchBar searchInputUpdate={setSearchInputDebounced} />
 			{searchResults.Response === 'True' ? (
-				<ResultCards searchResults={searchResults.Search} />
+				<ResultCards
+					searchResults={searchResults.Search}
+					nominationClickHandler={nominationClickHandler}
+					nominatedMovies={nominatedMovies}
+				/>
 			) : (
 				<p>{searchResults.Error}</p>
 			)}

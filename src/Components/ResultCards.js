@@ -26,24 +26,35 @@ const useStyles = makeStyles({
 	},
 });
 
-export const ResultCards = ({ searchResults }) => {
+export const ResultCards = ({
+	searchResults,
+	nominationClickHandler,
+	nominatedMovies,
+}) => {
 	const classes = useStyles();
 
-	const card = (imdbID, title, year, poster) => (
-		<Card key={imdbID} className={classes.card}>
+	const card = (movie, alreadyNominated) => (
+		<Card key={movie.imdbID} className={classes.card}>
 			<CardActionArea>
-				<CardMedia className={classes.cardMedia} image={poster} />
+				<CardMedia className={classes.cardMedia} image={movie.Poster} />
 				<CardContent>
 					<Typography variant="body1" gutterBottom>
-						{title}
+						{movie.Title}
 					</Typography>
 					<Typography variant="body2" color="textSecondary">
-						{year}
+						{movie.Year}
 					</Typography>
 				</CardContent>
 			</CardActionArea>
 			<CardActions className={classes.cardActions}>
-				<Button size="small" color="primary">
+				<Button
+					size="small"
+					color="primary"
+					disabled={alreadyNominated}
+					onClick={() =>
+						nominationClickHandler({ [movie.imdbID]: { ...movie } })
+					}
+				>
 					Nominate
 				</Button>
 			</CardActions>
@@ -52,12 +63,8 @@ export const ResultCards = ({ searchResults }) => {
 
 	const resultCards = searchResults.reduce((result, movie) => {
 		if (movie.Type === 'movie') {
-			const movieCard = card(
-				movie.imdbID,
-				movie.Title,
-				movie.Year,
-				movie.Poster
-			);
+			const alreadyNominated = movie.imdbID in nominatedMovies;
+			const movieCard = card(movie, alreadyNominated);
 			result.push(movieCard);
 		}
 		return result;
