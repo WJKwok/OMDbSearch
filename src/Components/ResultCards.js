@@ -20,11 +20,6 @@ const useStyles = makeStyles({
 	cardMedia: {
 		height: 200,
 	},
-	horizontalScroll: {
-		display: 'flex',
-		overflowX: 'auto',
-		padding: '20px 0px',
-	},
 });
 
 export const ResultCards = ({
@@ -74,5 +69,5 @@ export const ResultCards = ({
 		return result;
 	}, []);
 
-	return <div className={classes.horizontalScroll}>{resultCards}</div>;
+	return resultCards;
 };
