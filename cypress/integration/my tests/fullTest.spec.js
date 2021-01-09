@@ -1,3 +1,5 @@
+import { errorMessage } from '../../../src/Components/ProgressBar';
+
 it('End to end test', () => {
 	cy.visit('http://localhost:3000/');
 
@@ -43,15 +45,26 @@ it('End to end test', () => {
 			});
 		});
 
-	// nominating movies
+	// nominating movies check state of submit button
+	cy.get('[data-testid=submit-nomination-button]').should('be.disabled');
 	cy.get('[data-testid=nominate-button]').first().click();
 	cy.get('[data-testid=nominate-button]').first().click();
 	cy.get('[data-testid=nominate-button]').first().click();
 	cy.get('[data-testid=nominate-button]').first().click();
+	cy.get('[data-testid=submit-nomination-button]').should('be.disabled');
+
 	cy.get('[data-testid=nominate-button]').first().click();
+	cy.get('[data-testid=submit-nomination-button]').should('not.be.disabled');
 
 	// banner shows when 5 movies are nominated
 	cy.get('[data-testid=banner]')
-		.contains('You have nominated 5 movies, you may submit it now 😌')
+		.contains('You have nominated 5 movies')
+		.should('have.length', 1);
+
+	// error banner shows when > 5 movies are nominated
+	cy.get('[data-testid=nominate-button]').first().click();
+	cy.get('[data-testid=submit-nomination-button]').should('be.disabled');
+	cy.get('[data-testid=banner]')
+		.contains('🚨 You can only nominate 5 movies')
 		.should('have.length', 1);
 });

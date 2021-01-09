@@ -62,8 +62,12 @@ export const ProgressBar = ({ goal, current }) => {
 				<Typography className={classes.progressNumber} variant="body1">
 					{current}/{goal}
 				</Typography>
-				<Button variant="outlined" disabled={current !== goal}>
-					Nominate
+				<Button
+					data-testid="submit-nomination-button"
+					variant="outlined"
+					disabled={current !== goal}
+				>
+					Submit
 				</Button>
 			</div>
 			{exceededGoal && (
