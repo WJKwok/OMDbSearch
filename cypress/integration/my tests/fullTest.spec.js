@@ -1,5 +1,3 @@
-import { errorMessage } from '../../../src/Components/ProgressBar';
-
 it('End to end test', () => {
 	cy.visit('http://localhost:3000/');
 

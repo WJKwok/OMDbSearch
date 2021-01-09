@@ -30,6 +30,15 @@ export const Nomination = () => {
 
 	const minNominatedMoviesLength = 5;
 
+	useEffect(() => {
+		if (localStorage.getItem('userNomination')) {
+			const nominatedMoviesLocalStorage = JSON.parse(
+				localStorage.getItem('userNomination')
+			);
+			setNominatedMovies(nominatedMoviesLocalStorage);
+		}
+	}, []);
+
 	useEffect(async () => {
 		const OMDbRequestUrl = createOMDbURL(searchInput);
 		const results = await OMDdBySearch(OMDbRequestUrl);
@@ -39,7 +48,9 @@ export const Nomination = () => {
 	}, [searchInput]);
 
 	const nominationClickHandler = (movie) => {
-		setNominatedMovies({ ...nominatedMovies, ...movie });
+		const newNominatedMovies = { ...nominatedMovies, ...movie };
+		setNominatedMovies(newNominatedMovies);
+		localStorage.setItem('userNomination', JSON.stringify(newNominatedMovies));
 	};
 
 	const removeNominationHandler = (movieId) => {
@@ -48,6 +59,7 @@ export const Nomination = () => {
 		};
 		delete nominatedMoviesCopy[movieId];
 		setNominatedMovies(nominatedMoviesCopy);
+		localStorage.setItem('userNomination', JSON.stringify(nominatedMoviesCopy));
 	};
 
 	const getNextPageOfResults = async () => {
