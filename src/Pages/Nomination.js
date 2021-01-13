@@ -7,12 +7,16 @@ import { ResultCards } from '../Components/ResultCards';
 import { NominatedList } from '../Components/NominatedList';
 import { ProgressBar } from '../Components/ProgressBar';
 import { NextPageButton } from '../Components/NextPageButton';
+import { ClearLocalStorageButton } from '../Components/ClearLocalStorageButton';
 
 import { OMDdBySearch, createOMDbURL } from '../Services/OMDbRequests';
 
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
+	root: {
+		paddingTop: 40,
+	},
 	horizontalScroll: {
 		display: 'flex',
 		overflowX: 'auto',
@@ -28,6 +32,7 @@ export const Nomination = () => {
 	const [currentResultPage, setCurrentResultPage] = useState(1);
 	const [searchResults, setSearchResults] = useState({});
 	const [nominatedMovies, setNominatedMovies] = useState({});
+	const [nominationSubmitted, setNominationSubmitted] = useState(false);
 
 	const minNominatedMoviesLength = 5;
 
@@ -37,6 +42,13 @@ export const Nomination = () => {
 				localStorage.getItem('userNomination')
 			);
 			setNominatedMovies(nominatedMoviesLocalStorage);
+		}
+
+		if (localStorage.getItem('nominationSubmitted')) {
+			const nominationSubmittedLocalStorage = JSON.parse(
+				localStorage.getItem('nominationSubmitted')
+			);
+			setNominationSubmitted(nominationSubmittedLocalStorage);
 		}
 	}, []);
 
@@ -77,7 +89,8 @@ export const Nomination = () => {
 
 	const [submitNominations] = useMutation(NOMINATE_MOVIES, {
 		onCompleted({ nominateMovies }) {
-			console.log('results:', nominateMovies);
+			setNominationSubmitted(true);
+			localStorage.setItem('nominationSubmitted', JSON.stringify(true));
 		},
 		variables: {
 			movieInputs: Object.keys(nominatedMovies).map((movieKey) => {
@@ -89,32 +102,43 @@ export const Nomination = () => {
 	});
 
 	return (
-		<>
-			<SearchBar searchInputUpdate={setSearchInputDebounced} />
-			<div className={classes.horizontalScroll}>
-				{searchResults.Response === 'True' ? (
-					<>
-						<ResultCards
-							searchResults={searchResults.Search}
-							nominationClickHandler={nominationClickHandler}
-							nominatedMovies={nominatedMovies}
-						/>
-						<NextPageButton onClick={getNextPageOfResults} />
-					</>
-				) : (
-					<p>{searchResults.Error}</p>
-				)}
-			</div>
-			<ProgressBar
-				current={Object.keys(nominatedMovies).length}
-				goal={minNominatedMoviesLength}
-				submitHandler={submitNominations}
-			/>
-			<NominatedList
-				nominatedMovies={nominatedMovies}
-				removeNominationHandler={removeNominationHandler}
-			/>
-		</>
+		<div className={classes.root}>
+			{nominationSubmitted ? (
+				<ClearLocalStorageButton
+					clearSubmission={() => {
+						setNominationSubmitted(false);
+						setNominatedMovies({});
+					}}
+				/>
+			) : (
+				<>
+					<SearchBar searchInputUpdate={setSearchInputDebounced} />
+					<div className={classes.horizontalScroll}>
+						{searchResults.Response === 'True' ? (
+							<>
+								<ResultCards
+									searchResults={searchResults.Search}
+									nominationClickHandler={nominationClickHandler}
+									nominatedMovies={nominatedMovies}
+								/>
+								<NextPageButton onClick={getNextPageOfResults} />
+							</>
+						) : (
+							<p>{searchResults.Error}</p>
+						)}
+					</div>
+					<ProgressBar
+						current={Object.keys(nominatedMovies).length}
+						goal={minNominatedMoviesLength}
+						submitHandler={submitNominations}
+					/>
+					<NominatedList
+						nominatedMovies={nominatedMovies}
+						removeNominationHandler={removeNominationHandler}
+					/>
+				</>
+			)}
+		</div>
 	);
 };
 

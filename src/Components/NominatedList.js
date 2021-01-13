@@ -12,6 +12,9 @@ import { fallBackMoviePoster } from './utils/fallBackMoviePoster';
 
 const useStyles = makeStyles({
 	root: {
+		padding: '20px 0px',
+	},
+	card: {
 		display: 'flex',
 		marginBottom: 5,
 	},
@@ -26,7 +29,7 @@ export const NominatedList = ({ nominatedMovies, removeNominationHandler }) => {
 
 	const movieItem = (movie) => (
 		<Slide key={movie.imdbID} direction="right" in={true}>
-			<Card className={classes.root}>
+			<Card className={classes.card}>
 				<CardMedia
 					className={classes.cardMedia}
 					image={fallBackMoviePoster(movie.Poster)}
@@ -51,7 +54,11 @@ export const NominatedList = ({ nominatedMovies, removeNominationHandler }) => {
 		</Slide>
 	);
 
-	return Object.keys(nominatedMovies).map((movieId) =>
-		movieItem(nominatedMovies[movieId])
+	return (
+		<div className={classes.root}>
+			{Object.keys(nominatedMovies).map((movieId) =>
+				movieItem(nominatedMovies[movieId])
+			)}
+		</div>
 	);
 };
