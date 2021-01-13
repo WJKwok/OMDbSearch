@@ -22,14 +22,14 @@ const useStyles = makeStyles({
 	},
 });
 
-export const ResultCards = ({
-	searchResults,
+export const MovieCard = ({
+	movie,
+	alreadyNominated,
 	nominationClickHandler,
-	nominatedMovies,
 }) => {
 	const classes = useStyles();
 
-	const card = (movie, alreadyNominated) => (
+	return (
 		<Card data-testid="result-card" key={movie.imdbID} className={classes.card}>
 			<div>
 				<CardMedia
@@ -62,12 +62,4 @@ export const ResultCards = ({
 			</CardActions>
 		</Card>
 	);
-
-	const resultCards = searchResults.map((movie) => {
-		const alreadyNominated = movie.imdbID in nominatedMovies;
-		const movieCard = card(movie, alreadyNominated);
-		return movieCard;
-	});
-
-	return resultCards;
 };

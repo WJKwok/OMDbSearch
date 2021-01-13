@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import debounce from 'lodash/debounce';
 import { gql, useMutation } from '@apollo/client';
 
 import { SearchBar } from '../Components/SearchBar';
-import { ResultCards } from '../Components/ResultCards';
+import { SearchResultCards } from '../Components/SearchResultCards';
 import { NominatedList } from '../Components/NominatedList';
 import { ProgressBar } from '../Components/ProgressBar';
 import { NextPageButton } from '../Components/NextPageButton';
 import { ClearLocalStorageButton } from '../Components/ClearLocalStorageButton';
 
 import { OMDdBySearch, createOMDbURL } from '../Services/OMDbRequests';
+import { BannerContext } from '../Context/BannerContext';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -24,8 +25,10 @@ const useStyles = makeStyles({
 	},
 });
 
-export const Nomination = () => {
+export const Nomination = (props) => {
 	const classes = useStyles();
+	const { setBannerMessage } = useContext(BannerContext);
+
 	const [searchInput, setSearchInput] = useState('');
 	const setSearchInputDebounced = debounce(setSearchInput, 500);
 
@@ -88,9 +91,14 @@ export const Nomination = () => {
 	};
 
 	const [submitNominations] = useMutation(NOMINATE_MOVIES, {
-		onCompleted({ nominateMovies }) {
+		onCompleted() {
+			setBannerMessage({
+				text: 'Submission completed. Your nominations are highlighted 🥳',
+				code: 'Success',
+			});
 			setNominationSubmitted(true);
 			localStorage.setItem('nominationSubmitted', JSON.stringify(true));
+			props.history.push('/results');
 		},
 		variables: {
 			movieInputs: Object.keys(nominatedMovies).map((movieKey) => {
@@ -116,7 +124,7 @@ export const Nomination = () => {
 					<div className={classes.horizontalScroll}>
 						{searchResults.Response === 'True' ? (
 							<>
-								<ResultCards
+								<SearchResultCards
 									searchResults={searchResults.Search}
 									nominationClickHandler={nominationClickHandler}
 									nominatedMovies={nominatedMovies}
