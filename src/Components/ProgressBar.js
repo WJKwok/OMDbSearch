@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 	},
 });
 
-export const ProgressBar = ({ goal, current }) => {
+export const ProgressBar = ({ goal, current, submitHandler }) => {
 	const classes = useStyles();
 	const { setBannerMessage } = useContext(BannerContext);
 
@@ -65,6 +65,7 @@ export const ProgressBar = ({ goal, current }) => {
 				<Button
 					data-testid="submit-nomination-button"
 					variant="outlined"
+					onClick={submitHandler}
 					disabled={current !== goal}
 				>
 					Submit

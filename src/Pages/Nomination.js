@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import debounce from 'lodash/debounce';
+import { gql, useMutation } from '@apollo/client';
 
 import { SearchBar } from '../Components/SearchBar';
 import { ResultCards } from '../Components/ResultCards';
@@ -74,6 +75,19 @@ export const Nomination = () => {
 		setCurrentResultPage((prev) => prev + 1);
 	};
 
+	const [submitNominations] = useMutation(NOMINATE_MOVIES, {
+		onCompleted({ nominateMovies }) {
+			console.log('results:', nominateMovies);
+		},
+		variables: {
+			movieInputs: Object.keys(nominatedMovies).map((movieKey) => {
+				const movieData = nominatedMovies[movieKey];
+				delete movieData.Type;
+				return movieData;
+			}),
+		},
+	});
+
 	return (
 		<>
 			<SearchBar searchInputUpdate={setSearchInputDebounced} />
@@ -94,6 +108,7 @@ export const Nomination = () => {
 			<ProgressBar
 				current={Object.keys(nominatedMovies).length}
 				goal={minNominatedMoviesLength}
+				submitHandler={submitNominations}
 			/>
 			<NominatedList
 				nominatedMovies={nominatedMovies}
@@ -102,3 +117,12 @@ export const Nomination = () => {
 		</>
 	);
 };
+
+const NOMINATE_MOVIES = gql`
+	mutation nominateMovies($movieInputs: [MovieInput]!) {
+		nominateMovies(movieInputs: $movieInputs) {
+			Title
+			voteCount
+		}
+	}
+`;
