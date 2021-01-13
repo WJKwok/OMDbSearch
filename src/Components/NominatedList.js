@@ -15,6 +15,7 @@ export const NominatedList = ({ nominatedMovies, removeNominationHandler }) => {
 		<div className={classes.root}>
 			{Object.keys(nominatedMovies).map((movieId) => (
 				<MovieCardHorizontal
+					key={movieId}
 					movie={nominatedMovies[movieId]}
 					removeNominationHandler={removeNominationHandler}
 				/>

@@ -93,7 +93,7 @@ export const Nomination = (props) => {
 	const [submitNominations] = useMutation(NOMINATE_MOVIES, {
 		onCompleted() {
 			setBannerMessage({
-				text: 'Submission completed. Your nominations are highlighted 🥳',
+				text: 'Submission completed 🥳 Your nominations have a 👍 sign',
 				code: 'Success',
 			});
 			setNominationSubmitted(true);

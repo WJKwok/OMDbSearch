@@ -11,10 +11,8 @@ import Slide from '@material-ui/core/Slide';
 import { fallBackMoviePoster } from './utils/fallBackMoviePoster';
 
 const useStyles = makeStyles({
-	root: {
-		padding: '20px 0px',
-	},
 	card: {
+		flex: 1,
 		display: 'flex',
 		marginBottom: 5,
 	},
