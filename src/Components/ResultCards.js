@@ -63,14 +63,11 @@ export const ResultCards = ({
 		</Card>
 	);
 
-	const resultCards = searchResults.reduce((result, movie) => {
-		if (movie.Type === 'movie') {
-			const alreadyNominated = movie.imdbID in nominatedMovies;
-			const movieCard = card(movie, alreadyNominated);
-			result.push(movieCard);
-		}
-		return result;
-	}, []);
+	const resultCards = searchResults.map((movie) => {
+		const alreadyNominated = movie.imdbID in nominatedMovies;
+		const movieCard = card(movie, alreadyNominated);
+		return movieCard;
+	});
 
 	return resultCards;
 };

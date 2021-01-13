@@ -6,5 +6,5 @@ export const OMDdBySearch = async (url) => {
 };
 
 export const createOMDbURL = (searchInput, page = 1) => {
-	return ` http://www.omdbapi.com/?s=${searchInput}&page=${page}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
+	return ` http://www.omdbapi.com/?s=${searchInput}&type=movie&page=${page}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`;
 };
