@@ -84,12 +84,14 @@ export const Nomination = (props) => {
 		const nextPageToQuery = currentResultPage + 1;
 		const OMDbRequestUrl = createOMDbURL(searchInput, nextPageToQuery);
 		const results = await OMDdBySearch(OMDbRequestUrl);
-		const appendedSearchResults = {
-			...searchResults,
-			Search: [...searchResults.Search, ...results.Search],
-		};
-		setSearchResults(appendedSearchResults);
-		setCurrentResultPage((prev) => prev + 1);
+		if (results.Response === 'True') {
+			const appendedSearchResults = {
+				...searchResults,
+				Search: [...searchResults.Search, ...results.Search],
+			};
+			setSearchResults(appendedSearchResults);
+			setCurrentResultPage((prev) => prev + 1);
+		}
 	};
 
 	const [submitNominations] = useMutation(NOMINATE_MOVIES, {
