@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useQuery, gql } from '@apollo/client';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 import { MovieCardHorizontal } from '../Components/MovieCardHorizontal';
+
+import { BannerContext } from '../Context/BannerContext';
 
 const useStyles = makeStyles((theme) => ({
 	cardVoteWrapper: {
@@ -25,12 +27,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export const Results = () => {
+export const Results = (props) => {
 	const classes = useStyles();
+	const { setBannerMessage } = useContext(BannerContext);
 	const { loading, data } = useQuery(GET_NOMINATION);
-
 	const [nominatedMovies, setNominatedMovies] = useState({});
-	const [nominationSubmitted, setNominationSubmitted] = useState();
 
 	useEffect(() => {
 		if (localStorage.getItem('userNomination')) {
@@ -40,30 +41,38 @@ export const Results = () => {
 			setNominatedMovies(nominatedMoviesLocalStorage);
 		}
 
-		if (localStorage.getItem('nominationSubmitted')) {
-			const nominationSubmittedLocalStorage = JSON.parse(
-				localStorage.getItem('nominationSubmitted')
-			);
-			setNominationSubmitted(nominationSubmittedLocalStorage);
+		if (!localStorage.getItem('nominationSubmitted')) {
+			setBannerMessage({
+				text: 'Please submit nominations before viewing the result page 😏',
+				code: 'Error',
+			});
+			props.history.push('/');
 		}
 	}, []);
 
 	return (
 		<>
 			{loading && <p>Loading results...</p>}
-			{data &&
-				data.getNominations.map((nominee, index) => (
-					<div key={nominee.imdbID} className={classes.cardVoteWrapper}>
-						<Typography className={classes.rank} variant="body1" gutterBottom>
-							{index + 1}.
-						</Typography>
-						<MovieCardHorizontal movie={nominee} />
-						<Typography className={classes.votes} variant="body1" gutterBottom>
-							{nominee.voteCount}
-							{nominee.imdbID in nominatedMovies ? '👍' : null}
-						</Typography>
-					</div>
-				))}
+			{data && (
+				<>
+					{data.getNominations.map((nominee, index) => (
+						<div key={nominee.imdbID} className={classes.cardVoteWrapper}>
+							<Typography className={classes.rank} variant="body1" gutterBottom>
+								{index + 1}.
+							</Typography>
+							<MovieCardHorizontal movie={nominee} />
+							<Typography
+								className={classes.votes}
+								variant="body1"
+								gutterBottom
+							>
+								{nominee.voteCount}
+								{nominee.imdbID in nominatedMovies ? '👍' : null}
+							</Typography>
+						</div>
+					))}
+				</>
+			)}
 		</>
 	);
 };
