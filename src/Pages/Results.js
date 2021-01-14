@@ -36,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
 export const Results = (props) => {
 	const classes = useStyles();
 	const { setBannerMessage } = useContext(BannerContext);
-	const { loading, data } = useQuery(GET_NOMINATION);
+	const { loading, data } = useQuery(GET_NOMINATION, {
+		fetchPolicy: 'network-only',
+	});
 	const [nominatedMovies, setNominatedMovies] = useState({});
 
 	useEffect(() => {
