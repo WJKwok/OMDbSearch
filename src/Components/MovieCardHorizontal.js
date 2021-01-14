@@ -43,6 +43,7 @@ export const MovieCardHorizontal = ({ movie, removeNominationHandler }) => {
 							<Button
 								size="small"
 								color="primary"
+								data-testid="remove-nomination-button"
 								onClick={() => removeNominationHandler(movie.imdbID)}
 							>
 								Remove

@@ -30,7 +30,11 @@ export const MovieCard = ({
 	const classes = useStyles();
 
 	return (
-		<Card data-testid="result-card" key={movie.imdbID} className={classes.card}>
+		<Card
+			data-testid="search-result-card"
+			key={movie.imdbID}
+			className={classes.card}
+		>
 			<div>
 				<CardMedia
 					className={classes.cardMedia}

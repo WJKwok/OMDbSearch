@@ -7,7 +7,6 @@ import { SearchResultCards } from '../Components/SearchResultCards';
 import { NominatedList } from '../Components/NominatedList';
 import { ProgressBar } from '../Components/ProgressBar';
 import { NextPageButton } from '../Components/NextPageButton';
-import { ClearLocalStorageButton } from '../Components/ClearLocalStorageButton';
 
 import { OMDdBySearch, createOMDbURL } from '../Services/OMDbRequests';
 import { BannerContext } from '../Context/BannerContext';

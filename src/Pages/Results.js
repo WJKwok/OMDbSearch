@@ -66,7 +66,11 @@ export const Results = (props) => {
 					/>
 					<div className={classes.nominatedCards}>
 						{data.getNominations.map((nominee, index) => (
-							<div key={nominee.imdbID} className={classes.cardVoteWrapper}>
+							<div
+								key={nominee.imdbID}
+								data-testid="nomination-result-card"
+								className={classes.cardVoteWrapper}
+							>
 								<Typography
 									className={classes.rank}
 									variant="body1"
@@ -79,9 +83,12 @@ export const Results = (props) => {
 									className={classes.votes}
 									variant="body1"
 									gutterBottom
+									data-testid="vote-count"
 								>
 									{nominee.voteCount}
-									{nominee.imdbID in nominatedMovies ? ' 👍' : null}
+									{nominee.imdbID in nominatedMovies ? (
+										<span data-testid="voted-emoji">👍</span>
+									) : null}
 								</Typography>
 							</div>
 						))}
