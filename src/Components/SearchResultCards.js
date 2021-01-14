@@ -10,6 +10,7 @@ export const SearchResultCards = ({
 		const alreadyNominated = movie.imdbID in nominatedMovies;
 		return (
 			<MovieCard
+				key={movie.imdbID}
 				movie={movie}
 				alreadyNominated={alreadyNominated}
 				nominationClickHandler={nominationClickHandler}

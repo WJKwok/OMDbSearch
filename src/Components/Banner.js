@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 		color: 'white',
 		textAlign: 'center',
 		position: 'absolute',
-		top: 15,
+		top: 0,
 		left: 0,
 		zIndex: 1000,
 	}),

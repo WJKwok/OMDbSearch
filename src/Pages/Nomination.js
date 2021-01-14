@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
 	root: {
-		paddingTop: 40,
+		paddingTop: 20,
 	},
 	horizontalScroll: {
 		display: 'flex',
@@ -35,7 +35,6 @@ export const Nomination = (props) => {
 	const [currentResultPage, setCurrentResultPage] = useState(1);
 	const [searchResults, setSearchResults] = useState({});
 	const [nominatedMovies, setNominatedMovies] = useState({});
-	const [nominationSubmitted, setNominationSubmitted] = useState(false);
 
 	const minNominatedMoviesLength = 5;
 
@@ -48,19 +47,22 @@ export const Nomination = (props) => {
 		}
 
 		if (localStorage.getItem('nominationSubmitted')) {
-			const nominationSubmittedLocalStorage = JSON.parse(
-				localStorage.getItem('nominationSubmitted')
-			);
-			setNominationSubmitted(nominationSubmittedLocalStorage);
+			setBannerMessage({
+				text: 'You have already submitted your nomination 🚨',
+				code: 'Error',
+			});
+			props.history.push('/results');
 		}
 	}, []);
 
 	useEffect(async () => {
-		const OMDbRequestUrl = createOMDbURL(searchInput);
-		const results = await OMDdBySearch(OMDbRequestUrl);
-		setSearchResults(results);
-		setCurrentResultPage(1);
-		console.log(results);
+		if (searchInput) {
+			const OMDbRequestUrl = createOMDbURL(searchInput);
+			const results = await OMDdBySearch(OMDbRequestUrl);
+			setSearchResults(results);
+			setCurrentResultPage(1);
+			console.log(results);
+		}
 	}, [searchInput]);
 
 	const nominationClickHandler = (movie) => {
@@ -96,7 +98,6 @@ export const Nomination = (props) => {
 				text: 'Submission completed 🥳 Your nominations have a 👍 sign',
 				code: 'Success',
 			});
-			setNominationSubmitted(true);
 			localStorage.setItem('nominationSubmitted', JSON.stringify(true));
 			props.history.push('/results');
 		},
@@ -111,41 +112,30 @@ export const Nomination = (props) => {
 
 	return (
 		<div className={classes.root}>
-			{nominationSubmitted ? (
-				<ClearLocalStorageButton
-					clearSubmission={() => {
-						setNominationSubmitted(false);
-						setNominatedMovies({});
-					}}
-				/>
-			) : (
-				<>
-					<SearchBar searchInputUpdate={setSearchInputDebounced} />
-					<div className={classes.horizontalScroll}>
-						{searchResults.Response === 'True' ? (
-							<>
-								<SearchResultCards
-									searchResults={searchResults.Search}
-									nominationClickHandler={nominationClickHandler}
-									nominatedMovies={nominatedMovies}
-								/>
-								<NextPageButton onClick={getNextPageOfResults} />
-							</>
-						) : (
-							<p>{searchResults.Error}</p>
-						)}
-					</div>
-					<ProgressBar
-						current={Object.keys(nominatedMovies).length}
-						goal={minNominatedMoviesLength}
-						submitHandler={submitNominations}
-					/>
-					<NominatedList
-						nominatedMovies={nominatedMovies}
-						removeNominationHandler={removeNominationHandler}
-					/>
-				</>
-			)}
+			<SearchBar searchInputUpdate={setSearchInputDebounced} />
+			<div className={classes.horizontalScroll}>
+				{searchResults.Response === 'True' ? (
+					<>
+						<SearchResultCards
+							searchResults={searchResults.Search}
+							nominationClickHandler={nominationClickHandler}
+							nominatedMovies={nominatedMovies}
+						/>
+						<NextPageButton onClick={getNextPageOfResults} />
+					</>
+				) : (
+					<p>{searchResults.Error}</p>
+				)}
+			</div>
+			<ProgressBar
+				current={Object.keys(nominatedMovies).length}
+				goal={minNominatedMoviesLength}
+				submitHandler={submitNominations}
+			/>
+			<NominatedList
+				nominatedMovies={nominatedMovies}
+				removeNominationHandler={removeNominationHandler}
+			/>
 		</div>
 	);
 };

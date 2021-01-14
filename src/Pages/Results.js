@@ -5,10 +5,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 import { MovieCardHorizontal } from '../Components/MovieCardHorizontal';
+import { ClearLocalStorageButton } from '../Components/ClearLocalStorageButton';
 
 import { BannerContext } from '../Context/BannerContext';
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		paddingTop: 20,
+	},
+	nominatedCards: {
+		paddingTop: 20,
+	},
 	cardVoteWrapper: {
 		display: 'flex',
 		alignItems: 'center',
@@ -17,13 +24,12 @@ const useStyles = makeStyles((theme) => ({
 		width: '3ch',
 	},
 	votes: {
-		width: '3ch',
+		width: '6ch',
 		padding: 5,
 		marginLeft: 5,
 		backgroundColor: theme.palette.primary.light,
-		borderRadius: '30%',
+		borderRadius: '10%',
 		color: 'white',
-		textAlign: 'center',
 	},
 }));
 
@@ -54,24 +60,33 @@ export const Results = (props) => {
 		<>
 			{loading && <p>Loading results...</p>}
 			{data && (
-				<>
-					{data.getNominations.map((nominee, index) => (
-						<div key={nominee.imdbID} className={classes.cardVoteWrapper}>
-							<Typography className={classes.rank} variant="body1" gutterBottom>
-								{index + 1}.
-							</Typography>
-							<MovieCardHorizontal movie={nominee} />
-							<Typography
-								className={classes.votes}
-								variant="body1"
-								gutterBottom
-							>
-								{nominee.voteCount}
-								{nominee.imdbID in nominatedMovies ? '👍' : null}
-							</Typography>
-						</div>
-					))}
-				</>
+				<div className={classes.root}>
+					<ClearLocalStorageButton
+						additionalAction={() => props.history.push('/')}
+					/>
+					<div className={classes.nominatedCards}>
+						{data.getNominations.map((nominee, index) => (
+							<div key={nominee.imdbID} className={classes.cardVoteWrapper}>
+								<Typography
+									className={classes.rank}
+									variant="body1"
+									gutterBottom
+								>
+									{index + 1}.
+								</Typography>
+								<MovieCardHorizontal movie={nominee} />
+								<Typography
+									className={classes.votes}
+									variant="body1"
+									gutterBottom
+								>
+									{nominee.voteCount}
+									{nominee.imdbID in nominatedMovies ? ' 👍' : null}
+								</Typography>
+							</div>
+						))}
+					</div>
+				</div>
 			)}
 		</>
 	);
