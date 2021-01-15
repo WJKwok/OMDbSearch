@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from 'react';
-import { BannerContext } from '../Context/BannerContext';
+import React, { useEffect } from 'react';
+import { BannerCodeTypes, useSetBannerMessage } from '../Context/BannerContext';
 
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 
 export const ProgressBar = ({ goal, current, submitHandler }) => {
 	const classes = useStyles();
-	const { setBannerMessage } = useContext(BannerContext);
+	const setBannerMessage = useSetBannerMessage();
 
 	const exceededGoal = current > goal;
 	const reachedGoal = current === goal;
@@ -38,14 +38,14 @@ export const ProgressBar = ({ goal, current, submitHandler }) => {
 		if (reachedGoal) {
 			setBannerMessage({
 				text: 'You have nominated 5 movies, you may submit it now 😌',
-				code: 'Success',
+				code: BannerCodeTypes.Success,
 			});
 		}
 
 		if (exceededGoal) {
 			setBannerMessage({
 				text: errorMessage,
-				code: 'Error',
+				code: BannerCodeTypes.Error,
 			});
 		}
 	}, [goal, current]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import debounce from 'lodash/debounce';
 import { gql, useMutation } from '@apollo/client';
 
@@ -9,7 +9,7 @@ import { ProgressBar } from '../Components/ProgressBar';
 import { NextPageButton } from '../Components/NextPageButton';
 
 import { OMDdBySearch, createOMDbURL } from '../Services/OMDbRequests';
-import { BannerContext } from '../Context/BannerContext';
+import { useSetBannerMessage, BannerCodeTypes } from '../Context/BannerContext';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 
 export const Nomination = (props) => {
 	const classes = useStyles();
-	const { setBannerMessage } = useContext(BannerContext);
+	const setBannerMessage = useSetBannerMessage();
 
 	const [searchInput, setSearchInput] = useState('');
 	const setSearchInputDebounced = debounce(setSearchInput, 500);
@@ -48,7 +48,7 @@ export const Nomination = (props) => {
 		if (localStorage.getItem('nominationSubmitted')) {
 			setBannerMessage({
 				text: 'You have already submitted your nomination 🚨',
-				code: 'Error',
+				code: BannerCodeTypes.Error,
 			});
 			props.history.push('/results');
 		}
@@ -97,7 +97,7 @@ export const Nomination = (props) => {
 		onCompleted() {
 			setBannerMessage({
 				text: 'Submission completed 🥳 Your nominations have a 👍 sign',
-				code: 'Success',
+				code: BannerCodeTypes.Success,
 			});
 			localStorage.setItem('nominationSubmitted', JSON.stringify(true));
 			props.history.push('/results');

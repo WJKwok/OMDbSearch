@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { MovieCardHorizontal } from '../Components/MovieCardHorizontal';
 import { ClearLocalStorageButton } from '../Components/ClearLocalStorageButton';
 
-import { BannerContext } from '../Context/BannerContext';
+import { useSetBannerMessage, BannerCodeTypes } from '../Context/BannerContext';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const Results = (props) => {
 	const classes = useStyles();
-	const { setBannerMessage } = useContext(BannerContext);
+	const setBannerMessage = useSetBannerMessage();
 	const { loading, data } = useQuery(GET_NOMINATION, {
 		fetchPolicy: 'network-only',
 	});
@@ -52,7 +52,7 @@ export const Results = (props) => {
 		if (!localStorage.getItem('nominationSubmitted')) {
 			setBannerMessage({
 				text: 'Please submit nominations before viewing the result page 😏',
-				code: 'Error',
+				code: BannerCodeTypes.Error,
 			});
 			props.history.push('/');
 		}
