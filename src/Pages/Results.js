@@ -38,6 +38,17 @@ export const Results = (props) => {
 	const setBannerMessage = useSetBannerMessage();
 	const { loading, data } = useQuery(GET_NOMINATION, {
 		fetchPolicy: 'network-only',
+		onError({ graphQLErrors, networkError }) {
+			if (graphQLErrors) {
+				console.log('graphQLErrors', graphQLErrors);
+			}
+			if (networkError) {
+				setBannerMessage({
+					text: `[Network Error]: ${networkError}`,
+					code: BannerCodeTypes.Error,
+				});
+			}
+		},
 	});
 	const [nominatedMovies, setNominatedMovies] = useState({});
 
